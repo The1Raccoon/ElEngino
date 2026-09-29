@@ -31,7 +31,7 @@ int main(void)
 
         auto btn = new Core::UI::Button::Button(
             Vector2{ 10.0f + col * (btnW + gap), 50.0f + row * (btnH + gap) },
-            btnW, btnH, "ti", Core::UI::Button::rectangle, [i]() { printf("fent %i \n" , i); });
+            btnW, btnH, "ti", [i]() { printf("fent %i \n" , i); });
     }
 
 

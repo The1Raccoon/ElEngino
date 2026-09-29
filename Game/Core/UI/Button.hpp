@@ -9,12 +9,6 @@
 
 namespace Core::UI::Button
 {
-	enum ButtonType
-	{
-		rectangle,
-		circle
-	};
-
 	enum Orientation
 	{
 		centered,
@@ -31,8 +25,6 @@ namespace Core::UI::Button
 
 		Vector2 position;
 
-		ButtonType type;
-
 		std::string text;
 
 	private:
@@ -46,12 +38,11 @@ namespace Core::UI::Button
 		}
 
 	public:
-		Button(Vector2 pos = Vector2(100,30), float Width = 60.0f, float Height = 25.0f, std::string Text = "fent", ButtonType Type = rectangle, std::function<void()> callback = nullptr) : onClick(callback)
+		Button(Vector2 pos = Vector2(100,30), float Width = 60.0f, float Height = 25.0f, std::string Text = "fent", std::function<void()> callback = nullptr) : onClick(callback)
 		{
 			width = Width;
 			height = Height;
 			text = Text;
-			type = Type;
 			position = pos;
 		};
 
@@ -67,27 +58,17 @@ namespace Core::UI::Button
 
 			if (hidden) return;
 
-			switch (type)
+			if (IsHovering())
 			{
-				case rectangle:
-					if (IsHovering())
-					{
-						DrawRectangle(position.x, position.y, width, height, GREEN);
-						if (IsMouseButtonPressed(1))
-						{
-							click();
-						}
-					}
-					else
-					{
-						DrawRectangle(position.x, position.y, width, height, RED);
-					}
-					break;
-				case circle:
-
-					break;
-				default:
-					break;
+				DrawRectangle(position.x, position.y, width, height, GREEN);
+				if (IsMouseButtonPressed(1))
+				{
+					click();
+				}
+			}
+			else
+			{
+				DrawRectangle(position.x, position.y, width, height, RED);
 			}
 		}
 	};
