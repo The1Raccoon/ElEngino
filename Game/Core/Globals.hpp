@@ -26,6 +26,7 @@ namespace Core::Globals
 			RenderHeight = GetRenderHeight();
 		}
 	};
+
 	class Resources
 	{
 	public:
@@ -34,8 +35,18 @@ namespace Core::Globals
 		static void LoadResources()
 		{
 			MinecraftFont = LoadFont("resources/fonts/minecraftfont.ttf");
+		}
+	};
+	
+	class Engine
+	{
+	public:
 
-			printf("Font object address: %p\n", (void*)&MinecraftFont);
+		inline static float DeltaTime;
+
+		inline static void GetDT()
+		{
+			DeltaTime = GetFrameTime();
 		}
 	};
 }

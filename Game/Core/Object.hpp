@@ -1,8 +1,9 @@
 #pragma once
 
 
-#include "..\include/raylib.h"
-#include "..\include/raymath.h"
+#include "..\include\raylib.h"
+#include "..\include\raymath.h"
+#include "Globals.hpp"
 #include <cstdio>  
 #include <string>
 #include <vector>
@@ -16,8 +17,13 @@ namespace Core::Object
 
 	public:
 
-
 		Vector2 position;
+
+		Vector2 Velocity;
+
+		float GravityScale = 0;
+
+		bool IsKinematic ;
 
 		int layer = 0;
 
@@ -35,9 +41,23 @@ namespace Core::Object
 			AllObjects.push_back(this);
 		}
 
-
 		static const std::vector<Object*>& GetAllObjects() {
 			return AllObjects;
+		}
+
+		void InternalUpdate()
+		{
+			if (!IsKinematic)
+			{
+				position += Velocity * Core::Globals::Engine::DeltaTime;
+
+				if (GravityScale > 0)
+				{
+					Velocity.y += GravityScale * 9.81 * Core::Globals::Engine::DeltaTime;
+				}
+			}
+
+			Update();
 		}
 	};
 }

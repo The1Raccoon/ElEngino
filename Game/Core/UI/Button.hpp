@@ -17,7 +17,7 @@ namespace Core::UI::Button
 		corner
 	};
 
-	class Button : Core::Object::Object
+	class Button : public Core::Object::Object
 	{
 
 	private:
@@ -59,9 +59,11 @@ namespace Core::UI::Button
 
 		void Update() override
 		{
+			
 			hidden = position.x > Core::Globals::Window::RenderWidth || position.y > Core::Globals::Window::RenderHeight;
-			if (hidden) return;
 
+			if (hidden) return;
+			
 			IsMouseHovering = IsHovering();
 
 			HoverFrame->visible = IsMouseHovering;

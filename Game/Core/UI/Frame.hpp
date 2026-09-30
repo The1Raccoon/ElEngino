@@ -1,12 +1,16 @@
 #pragma once
 
-#include "..\..\include/raylib.h"
-#include "..\..\include/raymath.h"
+#include "..\..\include\raylib.h"
+#include "..\..\include\raymath.h"
 #include "..\Object.hpp"
 #include "..\Globals.hpp"
+#include "Text\BoundText.hpp"
 #include <cstdio>  
 #include <string>
 #include <functional>
+
+
+using namespace Core::UI::Text::BoundText;
 
 namespace Core::UI::Frame
 {
@@ -26,13 +30,13 @@ namespace Core::UI::Frame
 			if (!visible) return;
 
 			Vector2 m = Core::Globals::Window::MousePosition;
-			boxBounds.x = m.x;
+			boxBounds.x = m.x + 15;
 			boxBounds.y = m.y;
 
 
 			DrawRectangleRec(boxBounds, BLUE);
 
-			DrawText(TextFormat(text.c_str(), boxBounds.x, boxBounds.y), boxBounds.x + 10, boxBounds.y + 10, 20, WHITE);
+			BoundText::DrawBoundText(Core::Globals::Resources::MinecraftFont, text.c_str(), Vector2(boxBounds.x, boxBounds.y), boxBounds, 25, 1, RED);
 
 			visible = false;  
 		}

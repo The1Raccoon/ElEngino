@@ -16,10 +16,6 @@ int main(void)
     const int screenWidth = 720;
     const int screenHeight = 480;
 
-
-
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
-
     InitWindow(screenWidth, screenHeight, "basic window");
 
     Core::Globals::Resources::LoadResources();
@@ -41,7 +37,17 @@ int main(void)
 
         auto btn = new Core::UI::Button::Button(
             Vector2{ 10.0f + col * (btnW + gap), 50.0f + row * (btnH + gap) },
-            btnW, btnH, id, [i]() { printf("fent %i \n", i); });
+            btnW, btnH, std::format("this buttons id is GIBBRISH {}", i), [i]() { printf("fent %i \n", i); });
+
+
+
+        if (i == 1)
+        {
+            btn->IsKinematic = false;
+            btn->Velocity.x = 100;
+            btn->position.y = 1;
+            std::cout << btn->IsKinematic << std::endl;
+        }
     }
 
     while (!WindowShouldClose())   
@@ -51,7 +57,11 @@ int main(void)
 
         auto objects = Core::Object::Object::GetAllObjects();
 
-        for (auto* o : objects) o->Update();
+        for (auto* o : objects)
+        {
+            o->InternalUpdate();
+        }
+
 
         std::stable_sort(objects.begin(), objects.end(),
             [](auto* a, auto* b) { return a->layer < b->layer; });
@@ -67,7 +77,7 @@ int main(void)
 
 
         std::string formattedText = std::format("{} , {}", Core::Globals::Window::RenderHeight, Core::Globals::Window::RenderWidth);
-        DrawTextEx(Core::Globals::Resources::MinecraftFont, formattedText.c_str(), Vector2{ (Core::Globals::Window::RenderWidth / 2) - (MeasureTextEx(Core::Globals::Resources::MinecraftFont,formattedText.c_str(),25.0f,1.0f).x / 2), (float)Core::Globals::Window::RenderHeight / 2}, 25.0f, 1.0f, GREEN);
+        DrawTextEx(Core::Globals::Resources::MinecraftFont, formattedText.c_str(), Vector2{ (Core::Globals::Window::RenderWidth / 2) - (MeasureTextEx(Core::Globals::Resources::MinecraftFont,formattedText.c_str(),25.0f,1.0f).x / 2), ((float)Core::Globals::Window::RenderHeight / 2) - 15}, 25.0f, 1.0f, GREEN);
 
 
         DrawCircleV(Core::Globals::Window::MousePosition, 6, BLUE);
@@ -76,6 +86,8 @@ int main(void)
 
 
         DrawFPS(10, 10);
+
+        Core::Globals::Engine::GetDT();
 
         EndDrawing();
         

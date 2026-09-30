@@ -160,6 +160,7 @@
     <ClInclude Include="Core\Object.hpp" />
     <ClInclude Include="Core\UI\Button.hpp" />
     <ClInclude Include="Core\UI\Frame.hpp" />
+    <ClInclude Include="Core\UI\Text\BoundText.hpp" />
     <ClInclude Include="include\raylib.h" />
     <ClInclude Include="include\raymath.h" />
     <ClInclude Include="include\rlgl.h" />
