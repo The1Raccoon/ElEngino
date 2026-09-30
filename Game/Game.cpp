@@ -3,6 +3,8 @@
 #include "include/raymath.h"
 #include "Core/Object.hpp"
 #include "Core/UI/Button.hpp"
+#include "Core/Globals.hpp"
+#include <algorithm>
 #include <format>
 
 
@@ -20,45 +22,57 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "basic window");
 
+    Core::Globals::Resources::LoadResources();
+
+    //SetTargetFPS(240);
+
     const int perRow = 125;
     const int count = 7500;
     const float btnW = 10.0f, btnH = 10.0f, gap = 5.0f;
+
+    Core::UI::Button::Button* greg = nullptr;
 
     for (int i = 0; i < count; i++)
     {
         int col = i % perRow;
         int row = i / perRow;
 
+        const std::string id = std::to_string(i);
+
         auto btn = new Core::UI::Button::Button(
             Vector2{ 10.0f + col * (btnW + gap), 50.0f + row * (btnH + gap) },
-            btnW, btnH, "ti", [i]() { printf("fent %i \n" , i); });
+            btnW, btnH, id, [i]() { printf("fent %i \n", i); });
     }
-
-
-    Font customFont = LoadFont("resources/fonts/minecraftfont.ttf");
 
     while (!WindowShouldClose())   
     {
+
+        Core::Globals::Window::Update();
+
+        auto objects = Core::Object::Object::GetAllObjects();
+
+        for (auto* o : objects) o->Update();
+
+        std::stable_sort(objects.begin(), objects.end(),
+            [](auto* a, auto* b) { return a->layer < b->layer; });
+
         BeginDrawing();
         
         ClearBackground(RAYWHITE);
 
+        for (auto* o : objects) o->Draw();
+
+
         DrawLine(0, 0, GetMouseX(), GetMouseY(), RED);
 
 
-        std::string formattedText = std::format("{} , {}", GetRenderHeight(), GetRenderWidth());
-        DrawTextEx(customFont, formattedText.c_str(), Vector2{ ((float)GetRenderWidth() / 2) - (MeasureTextEx(customFont,formattedText.c_str(),25.0f,1.0f).x / 2), (float)GetRenderHeight() / 2}, 25.0f, 1.0f, GREEN);
+        std::string formattedText = std::format("{} , {}", Core::Globals::Window::RenderHeight, Core::Globals::Window::RenderWidth);
+        DrawTextEx(Core::Globals::Resources::MinecraftFont, formattedText.c_str(), Vector2{ (Core::Globals::Window::RenderWidth / 2) - (MeasureTextEx(Core::Globals::Resources::MinecraftFont,formattedText.c_str(),25.0f,1.0f).x / 2), (float)Core::Globals::Window::RenderHeight / 2}, 25.0f, 1.0f, GREEN);
 
 
-        DrawCircleV(GetMousePosition(), 6, BLUE);
+        DrawCircleV(Core::Globals::Window::MousePosition, 6, BLUE);
 
 
-
-
-        for (const auto& obj : Core::Object::Object::GetAllObjects())
-        {
-            obj->Update();
-        }
 
 
         DrawFPS(10, 10);

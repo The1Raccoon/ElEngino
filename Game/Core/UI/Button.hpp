@@ -3,6 +3,8 @@
 #include "..\..\include/raylib.h"
 #include "..\..\include/raymath.h"
 #include "..\Object.hpp"
+#include "..\Globals.hpp"
+#include "Frame.hpp"
 #include <cstdio>  
 #include <string>
 #include <functional>
@@ -17,15 +19,6 @@ namespace Core::UI::Button
 
 	class Button : Core::Object::Object
 	{
-		float height, width;
-
-		bool IsMouseHovering = false;
-
-		bool hidden = false;
-
-		Vector2 position;
-
-		std::string text;
 
 	private:
 		std::function<void()> onClick;
@@ -34,16 +27,28 @@ namespace Core::UI::Button
 		{
 			Rectangle btnBounds = { position.x, position.y, width, height };
 
-			return CheckCollisionPointRec(GetMousePosition(), btnBounds);
+			return CheckCollisionPointRec(Core::Globals::Window::MousePosition, btnBounds);
 		}
 
 	public:
-		Button(Vector2 pos = Vector2(100,30), float Width = 60.0f, float Height = 25.0f, std::string Text = "fent", std::function<void()> callback = nullptr) : onClick(callback)
+		float height, width;
+
+		bool IsMouseHovering = false;
+
+		bool hidden = false;
+
+		Core::UI::Frame::Frame* HoverFrame;
+
+		Button(Vector2 pos = Vector2(100,30), float Width = 60.0f, float Height = 25.0f, std::string text = "null", std::function<void()> callback = nullptr) : onClick(callback)
 		{
+			HoverFrame = new Core::UI::Frame::Frame();
+
 			width = Width;
 			height = Height;
-			text = Text;
 			position = pos;
+
+			HoverFrame->text = text;
+
 		};
 
 		void click() {
@@ -54,22 +59,21 @@ namespace Core::UI::Button
 
 		void Update() override
 		{
-			hidden = position.x > GetRenderWidth() || position.y > GetRenderHeight();
-
+			hidden = position.x > Core::Globals::Window::RenderWidth || position.y > Core::Globals::Window::RenderHeight;
 			if (hidden) return;
 
-			if (IsHovering())
-			{
-				DrawRectangle(position.x, position.y, width, height, GREEN);
-				if (IsMouseButtonPressed(1))
-				{
-					click();
-				}
-			}
-			else
-			{
-				DrawRectangle(position.x, position.y, width, height, RED);
-			}
+			IsMouseHovering = IsHovering();
+
+			HoverFrame->visible = IsMouseHovering;
+
+			if (IsMouseHovering && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+				click();
+		}
+
+		void Draw() override
+		{
+			if (hidden) return;
+			DrawRectangle(position.x, position.y, width, height, IsMouseHovering ? GREEN : RED);
 		}
 	};
 }

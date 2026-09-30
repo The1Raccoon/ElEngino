@@ -15,8 +15,15 @@ namespace Core::Object
 		inline static std::vector<Object*> AllObjects;
 
 	public:
+
+
+		Vector2 position;
+
+		int layer = 0;
+
 		virtual void Update() {};
 
+		virtual void Draw() {}
 
 		virtual ~Object()
 		{
