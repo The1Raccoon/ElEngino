@@ -52,14 +52,13 @@ int main(void)
 
         //test velocity stuff
 
-        /*if (i == 1)
+        if (i == 1)
         {
             btn->IsKinematic = false;
             btn->Velocity.x = 100;
             btn->position.y = 1;
             std::cout << btn->IsKinematic << std::endl;
-        }*/
-
+        }
     }
 
     while (!WindowShouldClose())   
@@ -104,10 +103,10 @@ int main(void)
         }
 
 
-        if (IsKeyDown(KEY_W))              Core::Globals::Engine::MainCamera.target.y -= 100 * Core::Globals::Engine::DeltaTime;
-        if (IsKeyDown(KEY_S))              Core::Globals::Engine::MainCamera.target.y += 100 * Core::Globals::Engine::DeltaTime;
-        if (IsKeyDown(KEY_A))              Core::Globals::Engine::MainCamera.target.x -= 100 * Core::Globals::Engine::DeltaTime;
-        if (IsKeyDown(KEY_D))              Core::Globals::Engine::MainCamera.target.x += 100 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_W))              Core::Globals::Engine::MainCamera.target.y -= 300 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_S))              Core::Globals::Engine::MainCamera.target.y += 300 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_A))              Core::Globals::Engine::MainCamera.target.x -= 300 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_D))              Core::Globals::Engine::MainCamera.target.x += 300 * Core::Globals::Engine::DeltaTime;
 
 
         DrawLine(0, 0, GetMouseX(), GetMouseY(), RED);

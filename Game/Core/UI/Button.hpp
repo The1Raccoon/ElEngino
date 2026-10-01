@@ -33,6 +33,8 @@ namespace Core::UI::Button
 
 		}
 
+		Vector2 GetSize() const override { return { width, height }; }
+
 	public:
 		float height, width;
 

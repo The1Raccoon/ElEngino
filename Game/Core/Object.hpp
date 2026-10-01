@@ -32,6 +32,8 @@ namespace Core::Object
 
 		bool Culled = false;
 
+		virtual Vector2 GetSize() const { return { 0.0f, 0.0f }; }
+
 		virtual void Update() {};
 
 		virtual void Draw() {}
@@ -52,25 +54,32 @@ namespace Core::Object
 
 		bool IsOnScreen()
 		{
-			bool isHidden = false;
+			const Vector2 size = GetSize();
 
-			if (this->RenderWorldSpace)
+			float viewLeft, viewTop, viewRight, viewBottom;
+
+			if (RenderWorldSpace)
 			{
-				isHidden = position.x < Core::Globals::Window::CamTopLeft.x ||
-					position.x > Core::Globals::Window::CamBottomRight.x ||
-					position.y < Core::Globals::Window::CamTopLeft.y ||
-					position.y > Core::Globals::Window::CamBottomRight.y;
+				viewLeft = Core::Globals::Window::CamTopLeft.x;
+				viewTop = Core::Globals::Window::CamTopLeft.y;
+				viewRight = Core::Globals::Window::CamBottomRight.x;
+				viewBottom = Core::Globals::Window::CamBottomRight.y;
 			}
 			else
 			{
-				isHidden = position.x < 0 ||
-					position.x > Core::Globals::Window::RenderWidth ||
-					position.y < 0 ||
-					position.y > Core::Globals::Window::RenderHeight;
+				viewLeft = 0;
+				viewTop = 0;
+				viewRight = (float)Core::Globals::Window::RenderWidth;
+				viewBottom = (float)Core::Globals::Window::RenderHeight;
 			}
 
-			Culled = isHidden;
+			bool isHidden =
+				position.x + size.x < viewLeft ||
+				position.x          > viewRight ||
+				position.y + size.y < viewTop ||
+				position.y          > viewBottom;
 
+			Culled = isHidden;
 			return !isHidden;
 		}
 
