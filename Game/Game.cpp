@@ -11,6 +11,7 @@
 int main(void)
 {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT );  
+
     //SetConfigFlags(FLAG_WINDOW_UNDECORATED);
 
     const int screenWidth = 720;
@@ -19,6 +20,14 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "basic window");
 
     Core::Globals::Resources::LoadResources();
+
+
+    Core::Globals::Engine::MainCamera = Camera2D{
+        .offset = Vector2{ Core::Globals::Window::RenderWidth / 2.0f, Core::Globals::Window::RenderHeight / 2.0f },
+        .target = Vector2{ 0, 0 },
+        .rotation = 0.0f,
+        .zoom = 1.0f
+    };
 
     //SetTargetFPS(240);
 
@@ -39,16 +48,18 @@ int main(void)
             Vector2{ 10.0f + col * (btnW + gap), 50.0f + row * (btnH + gap) },
             btnW, btnH, std::format("this buttons id is GIBBRISH {}", i), [i]() { printf("fent %i \n", i); });
 
+        btn->RenderWorldSpace = true;
 
+        //test velocity stuff
 
-
-        if (i == 1)
+        /*if (i == 1)
         {
             btn->IsKinematic = false;
             btn->Velocity.x = 100;
             btn->position.y = 1;
             std::cout << btn->IsKinematic << std::endl;
-        }
+        }*/
+
     }
 
     while (!WindowShouldClose())   
@@ -71,7 +82,32 @@ int main(void)
         
         ClearBackground(RAYWHITE);
 
-        for (auto* o : objects) o->Draw();
+
+
+
+        BeginMode2D(Core::Globals::Engine::MainCamera);
+        for (auto* o : objects)
+        {
+            if (o->RenderWorldSpace && !o->Culled)
+            {
+                o->Draw();
+            }
+        }
+        EndMode2D();
+
+        for (auto* o : objects)
+        {
+            if (!o->RenderWorldSpace && !o->Culled)
+            {
+                o->Draw();
+            }
+        }
+
+
+        if (IsKeyDown(KEY_W))              Core::Globals::Engine::MainCamera.target.y -= 100 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_S))              Core::Globals::Engine::MainCamera.target.y += 100 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_A))              Core::Globals::Engine::MainCamera.target.x -= 100 * Core::Globals::Engine::DeltaTime;
+        if (IsKeyDown(KEY_D))              Core::Globals::Engine::MainCamera.target.x += 100 * Core::Globals::Engine::DeltaTime;
 
 
         DrawLine(0, 0, GetMouseX(), GetMouseY(), RED);
@@ -81,17 +117,13 @@ int main(void)
         DrawTextEx(Core::Globals::Resources::MinecraftFont, formattedText.c_str(), Vector2{ (Core::Globals::Window::RenderWidth / 2) - (MeasureTextEx(Core::Globals::Resources::MinecraftFont,formattedText.c_str(),25.0f,1.0f).x / 2), ((float)Core::Globals::Window::RenderHeight / 2) - 15}, 25.0f, 1.0f, GREEN);
 
 
-        DrawCircleV(Core::Globals::Window::MousePosition, 6, BLUE);
-
-
-
+        DrawCircleV(Core::Globals::Window::ScreenMousePosition, 6, BLUE);
 
         DrawFPS(10, 10);
 
         Core::Globals::Engine::GetDT();
 
         EndDrawing();
-        
     }
 
     CloseWindow();        

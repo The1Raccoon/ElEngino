@@ -29,7 +29,7 @@ namespace Core::UI::Frame
 		{
 			if (!visible) return;
 
-			Vector2 m = Core::Globals::Window::MousePosition;
+			Vector2 m = Core::Globals::Window::ScreenMousePosition;
 			boxBounds.x = m.x + 15;
 			boxBounds.y = m.y;
 

@@ -7,6 +7,7 @@
 #include <cstdio>  
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace Core::Object
 {
@@ -27,13 +28,17 @@ namespace Core::Object
 
 		int layer = 0;
 
+		bool RenderWorldSpace = false;
+
+		bool Culled = false;
+
 		virtual void Update() {};
 
 		virtual void Draw() {}
 
 		virtual ~Object()
 		{
-			AllObjects.erase(std::remove(AllObjects.begin(), AllObjects.end(), this), AllObjects.end());
+			std::erase(AllObjects, this);
 		}
 
 		Object()
@@ -45,8 +50,34 @@ namespace Core::Object
 			return AllObjects;
 		}
 
+		bool IsOnScreen()
+		{
+			bool isHidden = false;
+
+			if (this->RenderWorldSpace)
+			{
+				isHidden = position.x < Core::Globals::Window::CamTopLeft.x ||
+					position.x > Core::Globals::Window::CamBottomRight.x ||
+					position.y < Core::Globals::Window::CamTopLeft.y ||
+					position.y > Core::Globals::Window::CamBottomRight.y;
+			}
+			else
+			{
+				isHidden = position.x < 0 ||
+					position.x > Core::Globals::Window::RenderWidth ||
+					position.y < 0 ||
+					position.y > Core::Globals::Window::RenderHeight;
+			}
+
+			Culled = isHidden;
+
+			return !isHidden;
+		}
+
 		void InternalUpdate()
 		{
+			if (!IsOnScreen()) return;
+
 			if (!IsKinematic)
 			{
 				position += Velocity * Core::Globals::Engine::DeltaTime;

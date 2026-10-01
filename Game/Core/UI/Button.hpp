@@ -27,15 +27,16 @@ namespace Core::UI::Button
 		{
 			Rectangle btnBounds = { position.x, position.y, width, height };
 
-			return CheckCollisionPointRec(Core::Globals::Window::MousePosition, btnBounds);
+			if (this->RenderWorldSpace) return CheckCollisionPointRec(Core::Globals::Window::WorldMousePosition, btnBounds);
+			else
+			return CheckCollisionPointRec(Core::Globals::Window::ScreenMousePosition, btnBounds);
+
 		}
 
 	public:
 		float height, width;
 
 		bool IsMouseHovering = false;
-
-		bool hidden = false;
 
 		Core::UI::Frame::Frame* HoverFrame;
 
@@ -54,7 +55,6 @@ namespace Core::UI::Button
 		{
 			delete HoverFrame;
 			HoverFrame = nullptr;
-			std::cout << "Button destroyed" << std::endl;	
 		}
 
 		void click() {
@@ -64,12 +64,7 @@ namespace Core::UI::Button
 		}
 
 		void Update() override
-		{
-			
-			hidden = position.x > Core::Globals::Window::RenderWidth || position.y > Core::Globals::Window::RenderHeight;
-
-			if (hidden) return;
-			
+		{			
 			IsMouseHovering = IsHovering();
 
 			HoverFrame->visible = IsMouseHovering;
@@ -80,7 +75,6 @@ namespace Core::UI::Button
 
 		void Draw() override
 		{
-			if (hidden) return;
 			DrawRectangle(position.x, position.y, width, height, IsMouseHovering ? GREEN : RED);
 		}
 	};
