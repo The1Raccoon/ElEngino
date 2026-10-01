@@ -23,7 +23,7 @@ namespace Core::Object
 
 		float GravityScale = 0;
 
-		bool IsKinematic ;
+		bool IsKinematic = true;
 
 		int layer = 0;
 
@@ -58,6 +58,11 @@ namespace Core::Object
 			}
 
 			Update();
+		}
+
+		void Destroy()
+		{
+			delete this;
 		}
 	};
 }

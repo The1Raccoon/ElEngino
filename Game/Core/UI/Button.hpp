@@ -48,8 +48,14 @@ namespace Core::UI::Button
 			position = pos;
 
 			HoverFrame->text = text;
-
 		};
+
+		~Button()
+		{
+			delete HoverFrame;
+			HoverFrame = nullptr;
+			std::cout << "Button destroyed" << std::endl;	
+		}
 
 		void click() {
 			if (onClick) {
