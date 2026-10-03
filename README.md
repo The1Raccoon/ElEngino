@@ -6,3 +6,11 @@ sadly everything is in hpp files
 - [x] (Object orientated system)
 - [x] (Object layered rendering) 
 - [x] (Basic UI system with buttons and Frame/Tooltips)
+
+
+
+
+
+
+
+- [ ] (Physics..... NO)
