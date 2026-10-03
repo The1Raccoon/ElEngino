@@ -26,7 +26,6 @@ namespace Core::Globals
 		}
 	};
 
-
 	class Window
 	{
 	public:
@@ -55,7 +54,6 @@ namespace Core::Globals
 			CamBottomRight = GetScreenToWorld2D(Vector2{ RenderWidth, RenderHeight }, Core::Globals::Engine::MainCamera);
 		}
 	};
-
 
 	class Resources
 	{

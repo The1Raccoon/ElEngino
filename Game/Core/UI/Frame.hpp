@@ -14,12 +14,12 @@ using namespace Core::UI::Text::BoundText;
 
 namespace Core::UI::Frame
 {
-	class Frame : Core::Object::Object
+	class Frame : public Core::Object::Object
 	{
 	public:
 		std::string text = "fent burger";
 
-		Rectangle boxBounds = { 200.0f, 150.0f, 300.0f, 100.0f };
+		Rectangle boxBounds = { 200.0f, 0.0f, 250.0f, 100.0f };
 
 		bool visible = false;
 

@@ -18,9 +18,11 @@ namespace Core::Object
 
 	public:
 
-		Vector2 position;
+		Vector2 position = {0,0};
 
 		Vector2 Velocity;
+
+		float rotation = 0;
 
 		float GravityScale = 0;
 

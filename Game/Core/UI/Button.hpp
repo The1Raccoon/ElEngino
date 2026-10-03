@@ -33,8 +33,6 @@ namespace Core::UI::Button
 
 		}
 
-		Vector2 GetSize() const override { return { width, height }; }
-
 	public:
 		float height, width;
 
@@ -45,6 +43,8 @@ namespace Core::UI::Button
 		Button(Vector2 pos = Vector2(100,30), float Width = 60.0f, float Height = 25.0f, std::string text = "null", std::function<void()> callback = nullptr) : onClick(callback)
 		{
 			HoverFrame = new Core::UI::Frame::Frame();
+
+			HoverFrame->position = Vector2(0, 0);
 
 			width = Width;
 			height = Height;
