@@ -60,9 +60,15 @@ namespace Core::Globals
 	public:
 		inline static Font MinecraftFont;
 
+
+		inline static Texture2D goonity;
+
 		static void LoadResources()
 		{
 			MinecraftFont = LoadFont("resources/fonts/minecraftfont.ttf");
+
+			goonity = LoadTexture("resources/textures/goonity.png");
+
 		}
 	};
 }

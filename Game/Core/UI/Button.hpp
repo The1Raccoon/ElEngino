@@ -33,10 +33,14 @@ namespace Core::UI::Button
 
 		}
 
+		Vector2 GetSize() const override { return { width, height }; }
+
 	public:
 		float height, width;
 
 		bool IsMouseHovering = false;
+
+		Color HoverColor = GREEN, NormalColor = RED;
 
 		Core::UI::Frame::Frame* HoverFrame;
 
@@ -51,6 +55,8 @@ namespace Core::UI::Button
 			position = pos;
 
 			HoverFrame->text = text;
+
+			texture = Core::Globals::Resources::goonity;
 		};
 
 		~Button()
@@ -77,7 +83,14 @@ namespace Core::UI::Button
 
 		void Draw() override
 		{
-			DrawRectangle(position.x, position.y, width, height, IsMouseHovering ? GREEN : RED);
+			if (texture.id != 0)
+			{
+				DrawTexturePro(texture, { 0, 0, (float)texture.width, (float)texture.height }, { position.x, position.y, width, height }, { 0, 0 }, 0, WHITE);
+			}
+			else
+			{
+				DrawRectangle(position.x, position.y, width, height, IsMouseHovering ? HoverColor : NormalColor);
+			}
 		}
 	};
 }

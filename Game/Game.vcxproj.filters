@@ -48,4 +48,9 @@
   <ItemGroup>
     <Font Include="resources\fonts\minecraftfont.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\goonity.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

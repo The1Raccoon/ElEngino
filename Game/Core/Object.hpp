@@ -20,7 +20,7 @@ namespace Core::Object
 
 		Vector2 position = {0,0};
 
-		Vector2 Velocity;
+		Vector2 Velocity = {0,0};
 
 		float rotation = 0;
 
@@ -34,11 +34,13 @@ namespace Core::Object
 
 		bool Culled = false;
 
+		Texture2D texture = {0};
+
 		virtual Vector2 GetSize() const { return { 0.0f, 0.0f }; }
 
 		virtual void Update() {};
 
-		virtual void Draw() {}
+		virtual void Draw() {};
 
 		virtual ~Object()
 		{
@@ -75,20 +77,17 @@ namespace Core::Object
 				viewBottom = (float)Core::Globals::Window::RenderHeight;
 			}
 
-			bool isHidden =
+			Culled =
 				position.x + size.x < viewLeft ||
 				position.x          > viewRight ||
 				position.y + size.y < viewTop ||
 				position.y          > viewBottom;
 
-			Culled = isHidden;
-			return !isHidden;
+			return !Culled;
 		}
 
 		void InternalUpdate()
 		{
-			if (!IsOnScreen()) return;
-
 			if (!IsKinematic)
 			{
 				position += Velocity * Core::Globals::Engine::DeltaTime;
@@ -100,6 +99,12 @@ namespace Core::Object
 			}
 
 			Update();
+		}
+
+		void InternalDraw()
+		{
+			if (IsOnScreen())
+				Draw();
 		}
 
 		void Destroy()
