@@ -105,16 +105,6 @@ int main(void)
         if (IsKeyDown(KEY_D))              Core::Globals::Engine::MainCamera.target.x += 300 * Core::Globals::Engine::DeltaTime;
 
 
-        float scrollZoom = GetMouseWheelMove();
-
-        if (scrollZoom != 0.0f)
-        {
-            Camera2D& cam = Core::Globals::Engine::MainCamera;
-
-            cam.zoom *= powf(1.1f, scrollZoom);
-            cam.zoom = Clamp(cam.zoom, 0.05f, 50.0f);
-        }
-
 
         DrawLine(0, 0, GetMouseX(), GetMouseY(), RED);
 
@@ -136,3 +126,4 @@ int main(void)
 
     return 0;
 }
+ 
